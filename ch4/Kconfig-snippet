@@ -1,0 +1,12 @@
+config LEDS_LDDDP
+	tristate "LED support for LDDDP LED controller"
+	depends on LEDS_CLASS
+	depends on HAS_IOMEM
+	depends on OF
+	help
+	  This driver supports the LDDDP MMIO LED controller.
+	  Each LED is controlled by a 32-bit register that holds
+	  its brightness value (0-255).
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called leds-ldddp.

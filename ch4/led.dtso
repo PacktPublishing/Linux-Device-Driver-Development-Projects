@@ -1,0 +1,56 @@
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/leds/common.h>
+
+&{/} {
+	#address-cells = <2>;
+	#size-cells = <2>;
+
+	reserved-memory {
+		#address-cells = <2>;
+		#size-cells = <2>;
+		ranges;
+
+		/* must be within main memory range, check your base DT! */
+		led_region: led-region@bffffff0 {
+			reg = <0x00 0xbffffff0 0x00 0x10>;
+			no-map;
+		};
+	};
+
+	led-controller@bffffff0 {
+		compatible = "ldddp,led-ctrl";
+		reg = <0x00 0xbffffff0 0x00 0x10>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		led@0 {
+			reg = <0>;
+			color = <LED_COLOR_ID_GREEN>;
+			function = LED_FUNCTION_STATUS;
+			max-brightness = <1>;
+		};
+
+		led@1 {
+			reg = <1>;
+			color = <LED_COLOR_ID_YELLOW>;
+			function = LED_FUNCTION_ACTIVITY;
+			max-brightness = <255>;
+		};
+
+		led@2 {
+			reg = <2>;
+			color = <LED_COLOR_ID_RED>;
+			function = LED_FUNCTION_FAULT;
+			max-brightness = <1024>;
+		};
+
+		led@3 {
+			reg = <3>;
+			color = <LED_COLOR_ID_BLUE>;
+			function = LED_FUNCTION_INDICATOR;
+			max-brightness = <65535>;
+		};
+	};
+};
