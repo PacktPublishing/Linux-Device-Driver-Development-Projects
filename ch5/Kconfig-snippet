@@ -1,0 +1,11 @@
+config LDDDP_IIO_CO2
+	tristate "LDDDP CO2 sensor"
+	depends on I2C
+	select REGMAP_I2C
+	select IIO_BUFFER
+	select IIO_TRIGGERED_BUFFER
+	help
+	  Say Y here to build support for the LDDDP CO2 concentration sensor.
+
+	  To compile this driver as a module, choose M here: the module will
+	  be called ldddp_iio_co2.

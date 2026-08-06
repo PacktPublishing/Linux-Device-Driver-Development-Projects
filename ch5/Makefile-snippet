@@ -1,0 +1,1 @@
+obj-$(CONFIG_LDDDP_IIO_CO2)	+= ldddp_iio_co2.o
