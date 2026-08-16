@@ -25,7 +25,21 @@ LDDDP_LINUX_DIR=/path/to/linux ./virtual-machine/qemu-ldddp.sh arm64
 
 ## Troubleshooting
 
+### Out of space when installing kernel modules
+
 If the Debian image runs out of space after installing the kernel modules, remember that the `modules_install` target installs all modules from the selected kernel build, not just the driver currently being tested. It installs them below `/lib/modules/$(KERNELRELEASE)`. A new directory, such as `7.2-g<commit>`, is created when `KERNELRELEASE` changes, commonly because `CONFIG_LOCALVERSION_AUTO` adds the current Git commit to the kernel version. Timestamps alone do not create a new directory; the same release directory is reused.
+
+To reduce the space used by the installed modules, enable module compression in the kernel configuration:
+
+```text
+CONFIG_MODULE_COMPRESS=y
+CONFIG_MODULE_COMPRESS_XZ=y
+CONFIG_MODULE_COMPRESS_ALL=y
+```
+
+XZ provides the highest compression ratio of the module compression options, and depending on the modules, can reduce their size by up to around 10x. The modules are installed as `.ko.xz` files instead of `.ko` files and can still be loaded normally with `modprobe`; no additional tools are required on a standard Debian system.
+
+The main drawbacks are that `modules_install` takes longer because every module has to be compressed, and loading a module requires it to be decompressed first, which consumes some CPU cycles. In practice, this overhead is negligible, especially in our QEMU-based development environment where reducing the size of the disk image is more important than the small additional CPU cost.
 
 To reclaim space, remove old release directories from `/lib/modules/`, keeping the one reported by `uname -r`:
 
